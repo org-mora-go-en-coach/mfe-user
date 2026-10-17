@@ -5,6 +5,16 @@ import "./style.css";
 type User = { id: string; email: string; name: string; createdAt: string };
 type View = "signup" | "members" | "mypage";
 
+function ensureStylesheet() {
+  const id = "mfe-user-styles";
+  if (document.getElementById(id)) return;
+  const link = document.createElement("link");
+  link.id = id;
+  link.rel = "stylesheet";
+  link.href = new URL("./assets/mfe-user.css", import.meta.url).href;
+  document.head.append(link);
+}
+
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, init);
   if (response.status === 204) return undefined as T;
@@ -104,6 +114,7 @@ function UserApp({ apiBaseUrl = "" }: { apiBaseUrl?: string }) {
 }
 
 export function mount(element: HTMLElement, options: { apiBaseUrl?: string } = {}) {
+  ensureStylesheet();
   const root = createRoot(element);
   root.render(<UserApp apiBaseUrl={options.apiBaseUrl} />);
   return () => root.unmount();
