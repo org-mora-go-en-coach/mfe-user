@@ -33,12 +33,13 @@ export function UserApp({ apiBaseUrl = "" }: { apiBaseUrl?: string }) {
   const [activity, setActivity] = React.useState<{history:ActivityLesson[];saved:ActivityLesson[]}>({history:[],saved:[]});
   const [activityLoading, setActivityLoading] = React.useState(false);
   const selectedUser = users.find((user) => user.id === selectedId) ?? null;
-  const lessonApiBaseUrl = apiBaseUrl.includes("localhost") ? "http://localhost:3001" : "https://api-lesson-six.vercel.app";
+  const userApiBaseUrl = apiBaseUrl.includes("/api/v") ? apiBaseUrl : `${apiBaseUrl}/api`;
+  const lessonApiBaseUrl = apiBaseUrl.includes("localhost") ? "http://localhost:3001/api/v1.0.2" : "https://api-lesson-six.vercel.app/api/v1.0.2";
 
   const load = React.useCallback(async () => {
     setLoading(true);
     try {
-      const data = await request<{ users: User[] }>(`${apiBaseUrl}/api/users`);
+      const data = await request<{ users: User[] }>(`${userApiBaseUrl}/users`);
       setUsers(data.users);
       const savedId = localStorage.getItem(selectedUserKey);
       if (savedId && data.users.some((user) => user.id === savedId)) {
@@ -50,19 +51,19 @@ export function UserApp({ apiBaseUrl = "" }: { apiBaseUrl?: string }) {
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "User API unavailable");
     } finally { setLoading(false); }
-  }, [apiBaseUrl]);
+  }, [userApiBaseUrl]);
 
-  const loadActivity = React.useCallback(async () => {setActivityLoading(true);try{setActivity(await request<{history:ActivityLesson[];saved:ActivityLesson[]}>(`${lessonApiBaseUrl}/api/activity`));setError("")}catch(reason){setError(reason instanceof Error?reason.message:"Lesson activity unavailable")}finally{setActivityLoading(false)}},[lessonApiBaseUrl]);
+  const loadActivity = React.useCallback(async () => {setActivityLoading(true);try{setActivity(await request<{history:ActivityLesson[];saved:ActivityLesson[]}>(`${lessonApiBaseUrl}/activity`));setError("")}catch(reason){setError(reason instanceof Error?reason.message:"Lesson activity unavailable")}finally{setActivityLoading(false)}},[lessonApiBaseUrl]);
   React.useEffect(() => { void load(); }, [load]);
   React.useEffect(() => { if(view==="history"||view==="saved")void loadActivity(); }, [view,loadActivity]);
 
-  async function advanceLesson(lesson:ActivityLesson){setActivityLoading(true);try{await request(`${lessonApiBaseUrl}/api/lessons/${lesson.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({progress:Math.min(100,lesson.progress+10)})});await loadActivity();setMessage(`Progress saved for ${lesson.title}.`)}catch(reason){setError(reason instanceof Error?reason.message:"Unable to save progress")}finally{setActivityLoading(false)}}
-  async function removeSaved(lesson:ActivityLesson){setActivityLoading(true);try{await request(`${lessonApiBaseUrl}/api/lessons/${lesson.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({saved:false})});await loadActivity();setMessage(`${lesson.title} removed from Saved.`)}catch(reason){setError(reason instanceof Error?reason.message:"Unable to update saved lesson")}finally{setActivityLoading(false)}}
+  async function advanceLesson(lesson:ActivityLesson){setActivityLoading(true);try{await request(`${lessonApiBaseUrl}/lessons/${lesson.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({progress:Math.min(100,lesson.progress+10)})});await loadActivity();setMessage(`Progress saved for ${lesson.title}.`)}catch(reason){setError(reason instanceof Error?reason.message:"Unable to save progress")}finally{setActivityLoading(false)}}
+  async function removeSaved(lesson:ActivityLesson){setActivityLoading(true);try{await request(`${lessonApiBaseUrl}/lessons/${lesson.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({saved:false})});await loadActivity();setMessage(`${lesson.title} removed from Saved.`)}catch(reason){setError(reason instanceof Error?reason.message:"Unable to update saved lesson")}finally{setActivityLoading(false)}}
 
   async function signUp(event: React.FormEvent) {
     event.preventDefault(); setBusy(true); setError(""); setMessage("");
     try {
-      const data = await request<{ user: User }>(`${apiBaseUrl}/api/users`, {
+      const data = await request<{ user: User }>(`${userApiBaseUrl}/users`, {
         method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, email }),
       });
       setUsers((current) => [data.user, ...current]);
@@ -77,7 +78,7 @@ export function UserApp({ apiBaseUrl = "" }: { apiBaseUrl?: string }) {
     if (!selectedUser || !window.confirm("Delete this account permanently? This cannot be undone.")) return;
     setBusy(true); setError("");
     try {
-      await request<void>(`${apiBaseUrl}/api/users/${selectedUser.id}`, { method: "DELETE" });
+      await request<void>(`${userApiBaseUrl}/users/${selectedUser.id}`, { method: "DELETE" });
       setUsers((current) => current.filter((user) => user.id !== selectedUser.id));
       localStorage.removeItem(selectedUserKey); setSelectedId(null);
       setMessage("The account has been deleted."); setView("signup");
