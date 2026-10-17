@@ -1,7 +1,6 @@
 import React from "react";
-
-type User = { id: string; email: string; name: string; createdAt: string };
-type ActivityLesson = { id:string; title:string; level:string; durationMinutes:number; progress:number; saved:boolean; lastStudiedAt:string|null };
+import type { ActivityLesson, User } from "../../4-entity";
+import type { UserAppProps } from "./type";
 type View = "signup" | "members" | "mypage" | "history" | "saved";
 const selectedUserKey = "mora-go:selected-user";
 
@@ -17,7 +16,7 @@ function initials(name: string) {
   return name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
 }
 
-export function UserApp({ apiBaseUrl = "" }: { apiBaseUrl?: string }) {
+export function UserApp({ apiBaseUrl = "" }: UserAppProps) {
   const [users, setUsers] = React.useState<User[]>([]);
   const [selectedId, setSelectedId] = React.useState<string | null>(() => localStorage.getItem(selectedUserKey));
   const [view, setView] = React.useState<View>(() => {
