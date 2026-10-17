@@ -9,7 +9,10 @@ function ensureStylesheet() {
   const link = document.createElement("link");
   link.id = id;
   link.rel = "stylesheet";
-  link.href = new URL("./assets/mfe-user.css", import.meta.url).href;
+  const entryUrl = new URL(import.meta.url);
+  const stylesheetUrl = new URL("./assets/mfe-user.css", entryUrl);
+  stylesheetUrl.search = entryUrl.search;
+  link.href = stylesheetUrl.href;
   document.head.append(link);
 }
 
