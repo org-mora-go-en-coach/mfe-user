@@ -6,9 +6,9 @@ test("1. 프로필을 생성하고 마이페이지를 표시한다", async ({ pa
     return route.fulfill({json:{users:[]}});
   });
   await page.goto("/");
-  await page.getByLabel("Name").fill("Mora Learner");
-  await page.getByLabel("Email").fill("mora@example.com");
-  await page.getByRole("button", { name: "Create my profile" }).click();
+  await page.getByLabel("이름").fill("Mora Learner");
+  await page.getByLabel("이메일").fill("mora@example.com");
+  await page.getByRole("button", { name: "내 프로필 만들기" }).click();
   await expect(page.getByRole("heading", { name: "Mora Learner" })).toBeVisible();
-  await expect(page.getByText("Welcome! Your learner profile is ready.")).toBeVisible();
+  await expect(page.getByText("환영합니다! 학습 프로필이 준비되었습니다.")).toBeVisible();
 });

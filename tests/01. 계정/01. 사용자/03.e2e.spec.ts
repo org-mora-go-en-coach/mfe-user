@@ -6,7 +6,7 @@ test("3. 선택한 회원을 탈퇴한다", async ({ page }) => {
   await page.route("**/api/v1.0.1/users/user-1", route => route.fulfill({status:204,body:""}));
   page.on("dialog", dialog => dialog.accept());
   await page.goto("/");
-  await page.getByRole("button", { name: "Delete account" }).click();
-  await expect(page.getByText("The account has been deleted.")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Create my profile" })).toBeVisible();
+  await page.getByRole("button", { name: "계정 삭제" }).click();
+  await expect(page.getByText("계정이 삭제되었습니다.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "내 프로필 만들기" })).toBeVisible();
 });
