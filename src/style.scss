@@ -1,8 +1,10 @@
+@use "./tokens" as *;
+
 .user-mfe {
   max-width: 880px;
   margin: 0 auto;
   padding: 46px 24px 80px;
-  color: #0d0d0d;
+  color: $text-color;
   font-family:
     Inter,
     ui-sans-serif,

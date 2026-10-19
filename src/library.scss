@@ -1,13 +1,23 @@
+@use "./tokens" as *;
+
 .library-view {
   display: grid;
   gap: 22px;
 }
-.library-heading h3 {
-  margin: 7px 0 5px;
-  font-size: 32px;
-  letter-spacing: -0.035em;
+
+.library-heading {
+  h3 {
+    margin: 7px 0 5px;
+    font-size: 32px;
+    letter-spacing: -0.035em;
+  }
+
+  p {
+    margin: 0;
+    color: #8f8f8f;
+  }
 }
-.library-heading p,
+
 .history-list p,
 .saved-grid p {
   margin: 0;

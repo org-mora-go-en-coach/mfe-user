@@ -1,8 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { UserApp } from "./1-page/user";
-import "./style.css";
-import "./library.css";
+import "./style.scss";
+import "./library.scss";
 
 function ensureStylesheet() {
   const id = "mfe-user-styles";
