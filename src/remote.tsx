@@ -17,9 +17,17 @@ function ensureStylesheet() {
   document.head.append(link);
 }
 
-export function mount(element: HTMLElement, options: { apiBaseUrl?: string } = {}) {
+export function mount(
+  element: HTMLElement,
+  options: { apiBaseUrl?: string; lessonApiBaseUrl?: string } = {},
+) {
   ensureStylesheet();
   const root = createRoot(element);
-  root.render(<UserApp apiBaseUrl={options.apiBaseUrl} />);
+  root.render(
+    <UserApp
+      apiBaseUrl={options.apiBaseUrl}
+      lessonApiBaseUrl={options.lessonApiBaseUrl}
+    />,
+  );
   return () => root.unmount();
 }

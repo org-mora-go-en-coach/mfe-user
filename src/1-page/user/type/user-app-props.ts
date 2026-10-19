@@ -1,1 +1,1 @@
-export type UserAppProps = { apiBaseUrl?: string };
+export type UserAppProps = { apiBaseUrl?: string; lessonApiBaseUrl?: string };

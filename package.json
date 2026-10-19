@@ -4,11 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --port 4174",
+    "dev": "vite --port 4102",
     "build": "vite build && node scripts/version-build.mjs",
-    "preview": "vite preview --port 4174",
+    "preview": "vite preview --port 4102",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@types/react": "^19.0.0",
@@ -20,6 +22,7 @@
     "vite": "6.4.4"
   },
   "devDependencies": {
-    "@playwright/test": "^1.64.1"
+    "@playwright/test": "^1.64.1",
+    "prettier": "3.7.4"
   }
 }
